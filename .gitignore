@@ -1,0 +1,79 @@
+# Ignore build artifacts
+*.o
+*.obj
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.dSYM
+
+# Ignore compiled object files
+*.gch
+*.pch
+
+# Ignore debug files
+*.log
+*.tmp
+*.dmp
+*.stackdump
+
+# Ignore generated files from compilation
+*.slo
+*.lo
+*.lai
+*.la
+
+# Ignore CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# Ignore Visual Studio/Visual Studio Code files
+.vscode/
+*.vcxproj*
+*.sln
+*.user
+*.filters
+
+# Ignore Code::Blocks files
+*.cbp
+*.layout
+
+# Ignore Xcode project files
+*.xcodeproj
+*.xcworkspace
+*.xcuserdata
+*.xcuserdatad
+*.mode1v3
+*.mode2v3
+*.pbxuser
+
+# Ignore QtCreator project files
+*.pro.user
+*.qmake.stash
+*.qmake.cache
+
+# Ignore backup files
+*~
+*.swp
+*.swo
+*.bak
+*.old
+
+# Ignore auto-generated documentation
+docs/
+doxygen/
+
+# Ignore Mac OS specific files
+.DS_Store
+*.DS_Store
+*.AppleDouble
+.AppleDesktop
+*.Spotlight-V100
+*.Trashes

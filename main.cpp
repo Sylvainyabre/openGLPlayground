@@ -1,29 +1,46 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
+
 using namespace std;
 
-void createObj(){
+int createWindow()
+{
+    GLFWwindow *window;
     unsigned int windowWidth = 800;
-    unsigned int windowHeight = 600
+    unsigned int windowHeight = 600;
+    char windowTitle[] = "Sylvain's Awesome Window";
 
-    //create object
-    unsigned int objectId = 0;
-    glGenObject(1,&objectId);
+    
+    if (!glfwInit())
+    {
+        cout << "Error initializing GLFW \n"
+             << endl;
+        return -1;
+    }
+    window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, NULL, NULL);
+    if (!window)
+    {
+        cout << "Error creating window \n"
+             << endl;
+        glfwTerminate();
+        return -1;
+    };
 
-    //bind object to context
-    glBindObject(GL_WINDOW_TARGET,objectId);
-    //set options of object currently bound to GL_WINDOW_TARGET
-    glSetObjectOption(GL_WINDOW_TARGET,GL_OPTION_WINDOW_WIDTH,windowWidth);
-    glSetObjectOption(GL_WINDOW_TARGET,GL_OPTION_WINDOW_WIDTH,windowHeight);
+    glfwMakeContextCurrent(window);
 
-    //Set context back to default
-    glBindObject(GL_WINDOW_TARGET,0)
-
-
-
-}
-
-int  main(){
-    cout<<"Hello world \n";
+    while (!glfwWindowShouldClose(window))
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+    cout << "Application run" << endl;
+    glfwTerminate();
     return 0;
+}
+int main()
+{
+    cout << "Starting" << endl;
+    int result = createWindow();
+    return result;
 }

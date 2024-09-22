@@ -62,7 +62,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++17 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.7"
+					"fragment" : "-g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk"
 				},
 				{
 					"backtrace" : 4,
@@ -85,11 +85,11 @@
 			[
 				{
 					"backtrace" : 5,
-					"path" : "/Users/yabre94854/programs/openGLProjects/dependencies/include"
+					"path" : "/Users/sylvainyabre/programming/openGLProjects/dependencies/include"
 				},
 				{
 					"backtrace" : 5,
-					"path" : "/Users/yabre94854/programs/openGLProjects/dependencies/include/GLFW"
+					"path" : "/Users/sylvainyabre/programming/openGLProjects/dependencies/include/GLFW"
 				}
 			],
 			"language" : "CXX",
@@ -110,7 +110,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.7"
+					"fragment" : "-g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk"
 				},
 				{
 					"backtrace" : 4,
@@ -133,11 +133,11 @@
 			[
 				{
 					"backtrace" : 5,
-					"path" : "/Users/yabre94854/programs/openGLProjects/dependencies/include"
+					"path" : "/Users/sylvainyabre/programming/openGLProjects/dependencies/include"
 				},
 				{
 					"backtrace" : 5,
-					"path" : "/Users/yabre94854/programs/openGLProjects/dependencies/include/GLFW"
+					"path" : "/Users/sylvainyabre/programming/openGLProjects/dependencies/include/GLFW"
 				}
 			],
 			"language" : "C",
@@ -157,12 +157,12 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-L/usr/local/opt/ruby/lib",
+				"fragment" : "",
 				"role" : "flags"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "/Users/yabre94854/programs/openGLProjects/dependencies/libs/libglfw3.a",
+				"fragment" : "/Users/sylvainyabre/programming/openGLProjects/dependencies/libs/libglfw3.a",
 				"role" : "libraries"
 			},
 			{

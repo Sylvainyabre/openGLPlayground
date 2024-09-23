@@ -33,19 +33,19 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 23,
+				"line" : 24,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 37,
+				"line" : 38,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 28,
+				"line" : 29,
 				"parent" : 0
 			},
 			{
@@ -62,7 +62,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk"
+					"fragment" : "-g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk"
 				},
 				{
 					"backtrace" : 4,
@@ -90,6 +90,10 @@
 				{
 					"backtrace" : 5,
 					"path" : "/Users/sylvainyabre/programming/openGLProjects/dependencies/include/GLFW"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/sylvainyabre/programming/openGLProjects/src"
 				}
 			],
 			"language" : "CXX",
@@ -103,14 +107,15 @@
 			},
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
 			]
 		},
 		{
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk"
+					"fragment" : "-g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk"
 				},
 				{
 					"backtrace" : 4,
@@ -138,12 +143,16 @@
 				{
 					"backtrace" : 5,
 					"path" : "/Users/sylvainyabre/programming/openGLProjects/dependencies/include/GLFW"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/sylvainyabre/programming/openGLProjects/src"
 				}
 			],
 			"language" : "C",
 			"sourceIndexes" : 
 			[
-				1
+				2
 			]
 		}
 	],
@@ -222,7 +231,8 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2
 			]
 		}
 	],
@@ -232,6 +242,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "src/main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/config.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

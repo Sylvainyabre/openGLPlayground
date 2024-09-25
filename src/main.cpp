@@ -1,7 +1,8 @@
 #include "config.h"
-
+#include "triangle_mesh.h"
 
 using namespace std;
+
 
 int createWindow()
 {
@@ -42,38 +43,6 @@ int createWindow()
     glViewport(0, 0, windowWidth, windowHeight);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    while (!glfwWindowShouldClose(window))
-    {
-        processInput(window);
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        // handle double buffer
-        glfwSwapBuffers(window);
-        // checks if any events are triggered (like keyboard input or mouse movement events),
-        glfwPollEvents();
-    }
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // Vertex 1 (bottom left)
-        0.5f, -0.5f, 0.0f,  // Vertex 2 (bottom right)
-        0.0f, 0.5f, 0.0f};  // Vertex 3 (top)
-
-    // Declare an unsigned integer to hold the buffer ID.
-    unsigned int VBO;
-
-    // Generate one buffer and store its ID in VBO.
-    glGenBuffers(1, &VBO);
-
-    // Bind the VBO to the GL_ARRAY_BUFFER target. This makes the VBO the active buffer,
-    // so all subsequent operations (like uploading vertex data) will affect this buffer.
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    // Upload the vertex data to the GPU.
-    // GL_STATIC_DRAW indicates that the data will not change, allowing for optimization.
-    // GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
-    // GL_STATIC_DRAW: the data is set only once and used many times.
-    // GL_DYNAMIC_DRAW: the data is changed a lot and used many times
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
 
     //Read shader files
     string vertexShaderSource = readShaderFile(vertexShaderFile);
@@ -85,12 +54,36 @@ int createWindow()
 		"../src/shaders/vertex.txt", 
 		"../src/shaders/fragment.txt"
 	);
+    TriangleMesh * triangle = new TriangleMesh();
+    while (!glfwWindowShouldClose(window))
+    {
+        // checks if any events are triggered (like keyboard input or mouse movement events),
+        glfwPollEvents();
+        processInput(window);
 
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(shader);
+        triangle->draw();
+
+        // handle double buffer
+        glfwSwapBuffers(window);
+       
+       
+        
+        
+    }
+    
+
+
+    
+
+    
+
+   
     glDeleteProgram(shader);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-                          (void *)0);
-    glEnableVertexAttribArray(0);
+	delete triangle;
 
     cout << "Window Closed" << endl;
     glfwTerminate();

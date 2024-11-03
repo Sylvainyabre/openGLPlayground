@@ -142,6 +142,206 @@ Supersampling: Takes multiple samples per pixel, blending the results to smooth 
 
 7. **Alternatives and Variations to Supersampling**
 
-Multisample Anti-Aliasing (MSAA): A more efficient version of supersampling that only takes multiple samples at pixel edges, where aliasing is most noticeable.
+- **Multisample Anti-Aliasing (MSAA)**: A more efficient version of supersampling that only takes multiple samples at pixel edges, where aliasing is most noticeable.
 Post-Processing Anti-Aliasing (e.g., FXAA, SMAA): Techniques applied after rendering to smooth edges without extra sampling, which is faster but may not achieve the same quality as supersampling.
 In summary, supersampling improves image quality by taking multiple samples within each pixel to smooth out edges and reduce aliasing. While effective, it requires more processing power and memory. This makes it an essential technique in high-quality rendering, especially when visual fidelity is more critical than processing speed.
+
+
+## Spatial transformations
+
+- **Linear transformations**:
+
+A linear transformation $( T: V \to W )$ satisfies the properties of additivity and homogeneity. The transformations can be represented with matrices, making them fundamental in various applications, including computer graphics.
+
+### Types of Linear Transformations
+
+1. **Identity Transformation**:
+   - **Definition**: Maps every vector to itself.
+   - **Example**: $( T(\mathbf{x}) = \mathbf{x} ) \;\; \forall \mathbf{x} \in V$.
+   - **Matrix Representation**: The identity matrix $( I )$.
+   - **Matrix**:
+     $$
+     I = \begin{pmatrix}
+     1 & 0 & 0 \\
+     0 & 1 & 0 \\
+     0 & 0 & 1
+     \end{pmatrix}
+     $$
+
+2. **Zero Transformation**:
+   - **Definition**: Maps every vector to the zero vector.
+   - **Example**: $T(\mathbf{x}) = \mathbf{0}$.
+   - **Matrix Representation**: The zero matrix $(0)$.
+   - **Matrix**:
+     $$
+     0 = \begin{pmatrix}
+     0 & 0 & 0 \\
+     0 & 0 & 0 \\
+     0 & 0 & 0
+     \end{pmatrix}
+     $$
+
+3. **Scaling Transformation**:
+4. ![Scaling](./src/assets/Scaling.png)
+   - **Definition**: Multiplies every vector by a non-zero scalar $k$.
+   - **Example**: $T(\mathbf{x}) = k \mathbf{x}$.
+   - **Matrix Representation**: $kI$.
+   - **Matrix**:
+     $$
+     kI = \begin{pmatrix}
+     k & 0 & 0 \\
+     0 & k & 0 \\
+     0 & 0 & k
+     \end{pmatrix}
+     $$
+
+5. **2D Rotation Transformation**:
+6. ![Rotation-2D](./src/assets/2D-rotation.png)
+   - **Definition**: Rotates vectors around the origin by an angle $\theta$.
+   - **Example**:
+   $$
+   T(\mathbf{x}) = \begin{pmatrix}
+   \cos(\theta) & -\sin(\theta) \\
+   \sin(\theta) & \cos(\theta)
+   \end{pmatrix} \mathbf{x}
+   $$
+   - **Matrix**:
+   $$
+   R = \begin{pmatrix}
+   \cos(\theta) & -\sin(\theta) & 0 \\
+   \sin(\theta) & \cos(\theta) & 0 \\
+   0 & 0 & 1
+   \end{pmatrix}
+   $$
+
+7. **3D Rotation Transformation**:
+8.  ![Rotation-3D](./src/assets/3D-rotation.png)
+   - **Definition**: Rotates vectors in 3D space around a specified axis (x, y, or z) by an angle $\theta$.
+   - **Rotation around the x-axis**:
+   $$
+   T(\mathbf{x}) = \begin{pmatrix}
+   1 & 0 & 0 \\
+   0 & \cos(\theta) & -\sin(\theta) \\
+   0 & \sin(\theta) & \cos(\theta)
+   \end{pmatrix} \mathbf{x}
+   $$
+   - **Rotation around the y-axis**:
+   $$
+   T(\mathbf{x}) = \begin{pmatrix}
+   \cos(\theta) & 0 & \sin(\theta) \\
+   0 & 1 & 0 \\
+   -\sin(\theta) & 0 & \cos(\theta)
+   \end{pmatrix} \mathbf{x}
+   $$
+   - **Rotation around the z-axis**:
+   $$
+   T(\mathbf{x}) = \begin{pmatrix}
+   \cos(\theta) & -\sin(\theta) & 0 \\
+   \sin(\theta) & \cos(\theta) & 0 \\
+   0 & 0 & 1
+   \end{pmatrix} \mathbf{x}
+   $$
+
+9. **Reflection Transformation**:
+   - **Definition**: Reflects vectors across a line (in $\mathbb{R}^2$) or a plane (in $\mathbb{R}^3$).
+   - **Example** (reflecting across the x-axis):
+   $$
+   T(\mathbf{x}) = \begin{pmatrix}
+   1 & 0 & 0 \\
+   0 & -1 & 0 \\
+   0 & 0 & 1
+   \end{pmatrix} \mathbf{x}
+   $$
+
+10. **Shearing Transformation**:
+   - **Definition**: Slants the shape of an object.
+   - **Example** (shearing in the x-direction):
+   $$
+   T(\mathbf{x}) = \begin{pmatrix}
+   1 & k & 0 \\
+   0 & 1 & 0 \\
+   0 & 0 & 1
+   \end{pmatrix} \mathbf{x}
+   $$
+   - **Where $k$ is the shear factor.**
+
+11. **Projection Transformation**:
+   - **Definition**: Projects vectors onto a subspace.
+   - **Example** (projecting onto the x-y plane):
+   $$
+   T(\mathbf{x}) = \begin{pmatrix}
+   1 & 0 & 0 \\
+   0 & 1 & 0 \\
+   0 & 0 & 0
+   \end{pmatrix} \mathbf{x}
+   $$
+
+### Properties of Linear Transformations
+
+1. **Kernel (Null Space)**: The set of vectors that map to the zero vector under the transformation $T$:
+   $$
+   \text{ker}(T) = \{ \mathbf{x} \in V \mid T(\mathbf{x}) = \mathbf{0} \}
+   $$
+
+2. **Image (Range)**: The set of all possible outputs of the transformation $T$:
+   $$
+   \text{im}(T) = \{ T(\mathbf{x}) \mid \mathbf{x} \in V \}
+   $$
+
+3. **Invertibility**: A linear transformation $T$ is invertible if there exists a linear transformation $T^{-1}$ such that:
+   $$
+   T^{-1}(T(\mathbf{x})) = \mathbf{x} \quad \text{for all } \mathbf{x} \in V
+   $$
+   This is equivalent to the matrix $A$ being invertible.
+
+
+### Matrix Decomposition
+
+![Rotation-3D](./src/assets/matrix-decomposition.png)
+
+### Singular Value Decomposition (SVD)
+
+**Definition**: Singular Value Decomposition is a mathematical technique that decomposes a matrix $A$ into three matrices: 
+
+$$
+A = U D V^T
+$$
+
+Where:
+- **$U$** is an $m \times m$ orthogonal matrix whose columns are the left singular vectors, representing the directions in the original space after the final transformation.
+- **$D$** is an $m \times n$ diagonal matrix with non-negative real numbers (the singular values) on the diagonal, indicating the scaling factors along the corresponding directions.
+- **$V^T$** is the transpose of an $n \times n$ orthogonal matrix whose columns are the right singular vectors, representing the rotation and alignment of the original coordinate system.
+
+### Transformations Applied by Each Component
+
+1. **Right Singular Vectors ($V$)**:
+   - **Transformation Applied**: **Rotation/Alignment**
+   - **Description**: Rotates and aligns the original coordinate system.
+
+2. **Diagonal Matrix ($D$)**:
+   - **Transformation Applied**: **Scaling**
+   - **Description**: Scales the transformed coordinates along the directions defined by the left singular vectors.
+
+3. **Left Singular Vectors ($U$)**:
+   - **Transformation Applied**: **Final Rotation/Orientation**
+   - **Description**: Applies a final rotation and alignment to the output space.
+
+### Transformations by Components of SVD
+
+1. **Right Singular Vectors ($V$)**:
+   - **Transformation Applied**: **Rotation/Alignment**
+   - **Description**: The matrix $V^T$ rotates and aligns the original coordinate system. Each column of $V$ defines a new basis for the input space, transforming the original points to align with the principal directions of variance in the data.
+
+2. **Diagonal Matrix ($D$)**:
+   - **Transformation Applied**: **Scaling**
+   - **Description**: The diagonal matrix $D$ scales the transformed coordinates along the directions defined by the left singular vectors. Each diagonal entry represents the magnitude of stretching or compressing along its corresponding axis. Larger values indicate more significant transformations, while smaller values indicate less effect.
+
+3. **Left Singular Vectors ($U$)**:
+   - **Transformation Applied**: **Final Rotation/Orientation**
+   - **Description**: The matrix $U$ applies a final rotation and alignment to the output space. Each column of $U$ defines how the scaled coordinates are transformed into the final coordinate system. This ensures that the transformed data retains its geometric relationships and orientations.
+
+### Summary of Transformations
+
+- **$V^T$**: **Rotates the original space to align with the principal directions**.
+- **$D$**: **Scales the transformed coordinates along these principal directions**.
+- **$U$**: **Applies a final rotation to orient the scaled coordinates in the new space**.

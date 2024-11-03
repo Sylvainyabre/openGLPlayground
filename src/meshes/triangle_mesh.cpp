@@ -3,8 +3,8 @@
 TriangleMesh::TriangleMesh()
 {
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // Vertex 1 (bottom left)
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Vertex 2 (bottom right)
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.5f, // Vertex 1 (bottom left)
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.2f,  // Vertex 2 (bottom right)
         0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f};  // Vertex 3 (top)
     vertex_count = 3;
 

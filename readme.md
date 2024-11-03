@@ -48,3 +48,100 @@ If encountering issues building, consider deleting `CMakeCache.txt`and redo step
 
 - **Vertex Buffer Objects (VBO)**:
   Vertex Buffer Objects (VBOs) are OpenGL objects that store vertex data in the GPU’s memory for efficient rendering. They allow developers to send large amounts of vertex data (like positions, colors, and texture coordinates) to the GPU in a single call, reducing the overhead of multiple draw calls. VBOs improve performance by minimizing data transfer between the CPU and GPU, making it easier to render complex 3D scenes smoothly.
+
+## **perspective Projection**
+In 3D graphics, perspective projection is the process of simulating how objects appear smaller as they get farther from the viewer, just like in real life. This effect is what makes a 3D scene appear realistic on a 2D screen, giving a sense of depth and distance.
+- **Distant Objects Appear Smaller**: Objects farther from the camera appear smaller, similar to how our eyes perceive distance.
+- **Parallel Lines Converge**: In perspective projection, parallel lines appear to meet at a point on the horizon (vanishing point), giving depth to 3D images.
+- **The Pinehoe Camera Model**: Imagine a pinhole camera with a small hole at one side, where light passes through and projects an upside-down image on the opposite wall. In graphics, the camera maps points in the 3D world onto a 2D “virtual sensor.” This mapping involves dividing by the z-coordinate to adjust for depth, where points farther away shrink proportionally.
+
+![Pinehole Camera](./src/assets/Pinehole.png)
+![Clipping](./src/assets/clipping.png)
+
+## **Rasterization Pipeline**
+  - **Input**: 3D primitives - essentially all triangles possibly with some addtional attributes such as color, normals and texture coordinates. Rasterization pipeline concerts all primitives to triangles, even lines and points are converted into triangles.
+  ![Triangles](./src/assets/rasterization_triangles.png)
+  - **Output**: Bitmap image possibly with depth alphas etc
+  - **Why triangles?**: Because they can approximate any shape
+
+  1. **Transform/Position Objects in the World**: 
+  The first step is to position objects in 3D space relative to a virtual camera. This includes translating, rotating, and scaling objects in relation to a world coordinate system. It uses transformations to place the object correctly within the scene, which is critical for achieving the desired perspective and spatial relationships between objects.
+
+  2. **Project Objects onto the Screen**: Once objects are positioned in 3D space, they are projected onto a 2D screen. This stage involves using a perspective or orthographic projection, converting 3D coordinates to 2D screen space. Perspective projection simulates how objects appear smaller as they get farther from the viewer, creating depth perception.
+
+  3. **Sample Triangle Coverage**: In this stage, the rasterizer determines which pixels on the screen are covered by each primitive (typically triangles) by sampling the triangle's area. The image shows a triangle with a grid of sample points, some of which fall within the triangle. This process is known as fragment generation and determines which parts of the triangle are visible on the screen.
+
+  4. **Interpolate Triangle Attributes at Covered Samples**: Each fragment (or sample point within a triangle) needs properties like color, depth, and texture coordinates to be computed. This stage interpolates these attributes based on the values at the triangle’s vertices. For example, if each vertex of the triangle has a color, the colors across the triangle are smoothly interpolated, creating gradients or shading effects.
+
+
+  5. **Sample Texture Maps / Evaluate Shaders**:  At this stage, the pipeline evaluates shaders and samples textures. The fragment shader calculates the final color of each fragment, possibly using texture maps (images mapped onto the surface) and applying lighting models. Shaders can create effects like lighting, shadows, and textures to make the object appear realistic.
+
+  6. **Combine Samples into Final Image**:The last step is combining all fragments into a final 2D image. This includes performing depth tests (to determine which fragments are in front) and blending (combining colors for effects like transparency). The result is an image with properly layered and blended fragments, with depth and transparency handled according to the scene's setup. 
+
+  ![Triangles](./src/assets/rasterization_pipeline.png)
+## Rasterization Pipeline: FAQ
+#### Q: Why do 3D models initially need to be transformed into 2D for rendering?
+
+A: The main reason is that screens are 2D surfaces that can only display two-dimensional images. When we render a 3D model, we need to “flatten” it into a 2D representation so that it can be displayed on a monitor or screen. This process is called projection and is necessary because human eyes perceive 3D depth based on the 2D projection on our retinas. The 3D-to-2D projection stage of the rasterization pipeline simulates depth and perspective by adjusting the size and position of objects based on their distance from the virtual camera.
+
+## Q: Why is it necessary to position, scale, and rotate the model in the initial transformation stage?
+
+A: Models are often created in a local coordinate system where the object's position, size, and orientation are set relative to itself, not the overall scene. Before projecting the object onto a screen, we need to:
+
+Position (Translate): Place the model in the correct spot within the 3D world (scene) relative to other objects and the camera.
+Scale: Adjust the model's size to fit the intended scene. Models may initially be created at a different scale (e.g., a chair might be modeled very small or very large). Scaling ensures that each object has the correct relative size.
+Rotate: Set the correct orientation of the object in the world. This allows for flexibility in positioning, such as tilting a plane's wings or rotating a character to face the camera.
+These transformations (positioning, scaling, and rotating) are all part of the model transformation stage, which prepares the object for accurate representation in the world scene, ensuring it looks natural and correctly positioned from the camera's point of view.
+
+## Q: Why can’t we directly project the 3D model onto 2D without transforming it first?
+
+A: Without transformations, models would appear at arbitrary positions, scales, and orientations that don’t match the intended scene. For example, a model created with a local origin (0,0,0) could end up at the screen's center, possibly overlapping with other objects or appearing in an unintended orientation. Transforming the model positions it accurately within the scene, aligning it with other elements, and ensuring proper perspective and scale before projecting it to 2D.
+
+
+## Sampling and Supersampling in Computer Graphics
+Sampling and supersampling are techniques used in computer graphics to create smooth, high-quality images on a pixel-based display. These techniques address challenges related to converting continuous 3D shapes and colors into discrete pixels.
+
+1. **What is Sampling?**
+- **Definition** : Sampling is the process of taking measurements or "samples" of a continuous image or shape at discrete points to represent it digitally.
+Purpose: In computer graphics, sampling determines the color and brightness of each pixel based on the parts of the scene it represents.
+Challenge: Because screens are made up of individual pixels, they cannot display the fine detail of continuous shapes perfectly, especially along edges. This can cause aliasing, where edges look jagged or "stair-stepped."
+Example:
+Imagine a diagonal line drawn across a grid of pixels. Sampling takes the center of each pixel to determine whether it should be colored based on where the line passes. But if the line falls between pixels, some pixels get only part of the line, leading to an uneven, jagged appearance.
+
+2. **Aliasing and Its Artifacts**
+- **Aliasing**: Aliasing is the distortion that occurs when sampling an image at a lower resolution than the scene requires.
+- **Artifacts**: This leads to visible artifacts like jagged edges on lines and shapes (often called "jaggies") and unwanted patterns (e.g., moiré patterns).
+Solution: To reduce these artifacts, we need more detailed sampling around these problematic areas.
+
+3. **What is Supersampling?**
+
+- **Definition**: Supersampling is an anti-aliasing technique that takes multiple samples within each pixel (A single pixel on a color display is made of several subpixels) and averages them to get a smoother color representation. Instead of just one sample (e.g., the pixel center), multiple samples are taken at various points in the pixel.
+-  **Concept of Sub-Pixel Sampling**
+  Imagine each pixel on the screen represents a tiny "window" into the scene.
+  Instead of taking just one color sample (usually at the center of the pixel), supersampling takes multiple samples at various points within that pixel’s area.
+  For example, a 4x4 supersampling pattern divides the pixel into a virtual 4x4 grid, so we get 16 sample points within that pixel’s area. Even though the pixel is discrete, we simulate this finer sampling grid to approximate the different colors or intensities within that pixel.
+
+- **How it Works**:
+
+ For each pixel, supersampling divides it into a grid (e.g., 4x4), taking samples at each sub-point within the pixel. These samples capture finer details and color variations that a single sample would miss.
+Averaging: The colors of all the sub-pixel samples are averaged to determine the final color of the pixel. This blending effect smooths out transitions between pixels, especially along edges.
+- **Example**:
+
+For a 4x4 supersampling, each pixel is divided into 16 sub-samples, creating a detailed map of the pixel's color variation. If a diagonal line cuts across a pixel, some sub-samples will lie on the line, and others won’t. The average color of the 16 samples will produce a blended effect, making the line look smoother.
+
+4.**Benefits of Supersampling**
+
+Smoother Edges: By blending colors at pixel boundaries, supersampling removes the jagged "stair-step" look, producing smooth transitions and high-quality edges.
+Improved Image Quality: Supersampling can handle complex textures and fine details more effectively, reducing visual artifacts and making images look more realistic.
+5. Drawbacks of Supersampling
+Increased Computation: Supersampling requires many more samples per pixel, which means more calculations. This can significantly impact performance and rendering time, especially in real-time applications like games.
+Memory Usage: More samples mean more data, leading to higher memory requirements.
+6. Comparison: Regular Sampling vs. Supersampling
+Regular Sampling: Takes one sample per pixel, fast but prone to aliasing.
+Supersampling: Takes multiple samples per pixel, blending the results to smooth edges, but is more computationally intensive.
+
+7. **Alternatives and Variations to Supersampling**
+
+Multisample Anti-Aliasing (MSAA): A more efficient version of supersampling that only takes multiple samples at pixel edges, where aliasing is most noticeable.
+Post-Processing Anti-Aliasing (e.g., FXAA, SMAA): Techniques applied after rendering to smooth edges without extra sampling, which is faster but may not achieve the same quality as supersampling.
+In summary, supersampling improves image quality by taking multiple samples within each pixel to smooth out edges and reduce aliasing. While effective, it requires more processing power and memory. This makes it an essential technique in high-quality rendering, especially when visual fidelity is more critical than processing speed.

@@ -10,8 +10,6 @@ int createWindow()
     unsigned int windowWidth = 800;
     unsigned int windowHeight = 600;
     char windowTitle[] = "Sylvain's Awesome Window";
-    string vertexShaderFile = "./shaders/vertex.txt";
-    string fragmentShaderFile = "./shaders/fragment.txt";
 
     if (!glfwInit())
     {
@@ -43,16 +41,18 @@ int createWindow()
     glViewport(0, 0, windowWidth, windowHeight);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    string exePath = filesystem::current_path().string();
+    string shaderPath = exePath + "/src/shaders/";
 
+    string vertexShaderFile = shaderPath + "vertex.vert";
+    string fragmentShaderFile = shaderPath + "fragment.frag";
     //Read shader files
     string vertexShaderSource = readShaderFile(vertexShaderFile);
     string fragmentShaderSource = readShaderFile(fragmentShaderFile);
-    
-
-
+ 
     unsigned int shader = make_shader(
-		"../src/shaders/vertex.txt", 
-		"../src/shaders/fragment.txt"
+		shaderPath + "vertex.vert", 
+        shaderPath + "fragment.frag"
 	);
     TriangleMesh * triangle = new TriangleMesh();
     while (!glfwWindowShouldClose(window))
@@ -85,13 +85,13 @@ int createWindow()
     glDeleteProgram(shader);
 	delete triangle;
 
-    cout << "Window Closed" << endl;
+    cout << "==========================Window Closed=========================" << endl;
     glfwTerminate();
     return 0;
 }
 int main()
 {
-    cout << "Starting" << endl;
+    cout << "==========================Starting======================" << endl;
     // Define an array of vertices for a triangle.
     // Each vertex has 3 coordinates: x, y, and z.
 

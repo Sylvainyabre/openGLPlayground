@@ -1,4 +1,6 @@
 #include "config.h"
+#include <filesystem>
+
 
 unsigned int make_shader(const string &vertex_filepath, const string &fragment_filepath)
 {
@@ -61,7 +63,8 @@ unsigned int make_module(const string &filepath, unsigned int module_type)
     }
     string shaderSource = bufferedLines.str();
     const char *shaderSrc = shaderSource.c_str();
-    bufferedLines.str("");
+
+    bufferedLines.str();
     file.close();
 
     //Create a shader module
@@ -81,10 +84,13 @@ unsigned int make_module(const string &filepath, unsigned int module_type)
 
     return shaderModule;
 }
+
+
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
+
 
 void processInput(GLFWwindow *window)
 {
@@ -92,17 +98,29 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
+/**
+ * Reads a shader file given its path 
+ */
 string readShaderFile(const string &path)
 {
     ifstream fileStream(path);
-    if (!fileStream.is_open())
+    if (!fileStream)
     {
-        cout << "Error openening file " << path << endl;
+        cout << "Error opening file " << path << endl;
         return "";
     }
 
     stringstream buffer;
     buffer << fileStream.rdbuf(); // Read the file into the buffer
+
+    // Check for reading errors
+    if (fileStream.fail())
+    {
+        cout << "Error reading file " << path << endl;
+        return "";
+    }
+
+
     // Close the file after reading
     fileStream.close();
     return buffer.str();

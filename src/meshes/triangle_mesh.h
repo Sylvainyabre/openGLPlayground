@@ -10,5 +10,6 @@ class TriangleMesh{
         unsigned int vertex_count;
         unsigned int VBO;
         unsigned int VAO;
+        unsigned int EBO;
 
 };

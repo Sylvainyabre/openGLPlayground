@@ -3,10 +3,21 @@
 TriangleMesh::TriangleMesh()
 {
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.5f, // Vertex 1 (bottom left)
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.2f,  // Vertex 2 (bottom right)
-        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f};  // Vertex 3 (top)
+        0.5f, 0.5f, 0.0f,   // top right
+        0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f, // bottom left
+        -0.5f, 0.5f, 0.0f   // top left
+    };
+    unsigned int indices[] = {
+        // note that we start from 0!
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
     vertex_count = 3;
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
+                 GL_STATIC_DRAW);
 
     // Generate a Vertex Array Object (VAO) which will store all the state
     // related to vertex attribute configurations. This is necessary to keep track
@@ -26,7 +37,7 @@ TriangleMesh::TriangleMesh()
 
     // Allocate memory and transfer the vertex data from the CPU to the GPU by passing
     // the vertices array into the VBO. We use GL_STATIC_DRAW because the vertex data is not expected to change frequently.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) * sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Define the first attribute pointer (index 0) which tells OpenGL how to interpret
     // the position data stored in the VBO. This links the position data to the shader's input.
@@ -37,7 +48,7 @@ TriangleMesh::TriangleMesh()
     // - GL_FALSE: We don't want normalized values
     // - 24: Byte stride between consecutive vertices (each vertex has 6 floats = 24 bytes)
     // - (void*)0: Offset where the position data starts in the buffer
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12, (void *)0);
 
     // Enable the vertex attribute at index 0 (position), allowing OpenGL to use it during rendering.
     glEnableVertexAttribArray(0);
@@ -51,7 +62,7 @@ TriangleMesh::TriangleMesh()
     // - GL_FALSE: We don't want normalized values
     // - 24: Byte stride between consecutive vertices (each vertex has 6 floats = 24 bytes)
     // - (void*)12: Offset where the color data starts in the buffer (after the position data)
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, (void *)12);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 12, (void *)12);
 
     // Enable the vertex attribute at index 1 (color), allowing OpenGL to use it during rendering.
     glEnableVertexAttribArray(1);
@@ -59,7 +70,7 @@ TriangleMesh::TriangleMesh()
 
 void TriangleMesh::draw()
 {
-       // Bind the previously created Vertex Array Object (VAO).
+    // Bind the previously created Vertex Array Object (VAO).
     // This makes it the active VAO, which contains the vertex attribute configurations.
     // This ensures that all subsequent draw calls will use the data stored and referenced by this VAO.
     glBindVertexArray(VAO);
@@ -70,10 +81,14 @@ void TriangleMesh::draw()
     // - 0: Starting index in the vertex array to begin drawing from.
     // - vertex_count: Number of vertices to render. This will draw vertex_count / 3 triangles.
     glDrawArrays(GL_TRIANGLES, 0, vertex_count);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 };
 
 TriangleMesh::~TriangleMesh()
 {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 }

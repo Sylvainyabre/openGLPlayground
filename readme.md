@@ -49,6 +49,47 @@ If encountering issues building, consider deleting `CMakeCache.txt`and redo step
 - **Vertex Buffer Objects (VBO)**:
   Vertex Buffer Objects (VBOs) are OpenGL objects that store vertex data in the GPU’s memory for efficient rendering. They allow developers to send large amounts of vertex data (like positions, colors, and texture coordinates) to the GPU in a single call, reducing the overhead of multiple draw calls. VBOs improve performance by minimizing data transfer between the CPU and GPU, making it easier to render complex 3D scenes smoothly.
 
+- **Vertex Array Objects (VAO)**:
+  ![VAO](./src/assets/VAO_diagram.png)
+
+**Definition**:
+
+OpenGL objects that store the configuration of vertex attribute arrays
+
+**Purpose**:
+
+Act as containers that encapsulate format and layout of vertex data in VBOs
+Maintain bindings between attribute locations in shader programs and VBO data
+Store specifications like stride and offset
+
+
+**Benefits**:
+
+Eliminate need to reconfigure vertex attributes for each draw call
+Reduce code complexity
+Improve performance by preventing redundant state changes
+Allow quick switching between different vertex configurations
+
+
+**Relationship with VBOs**:
+
+VBOs = containers holding actual vertex data
+VAOs = "recipe cards" telling OpenGL how to interpret that data
+VAOs reference VBOs rather than storing vertex data themselves
+
+
+**Usage**:
+
+Bind once to save vertex configuration state
+Switch between different 3D models by simply binding different VAOs
+Eliminates need for manual vertex attribute reconfiguration
+Particularly useful when rendering multiple objects with different vertex formats
+
+
+- **Element Buffer Objects (EBO)**:  
+![EBO](./src/assets/EBO.png)
+  Element Buffer Objects (EBOs) are OpenGL objects that store indices for vertex data, allowing for efficient reuse of vertices when rendering shapes. Instead of duplicating vertex data for shared vertices (like the corners of a square), you store each unique vertex once in a Vertex Buffer Object (VBO) and use an EBO to specify the order in which vertices should be drawn. This reduces memory usage and can improve performance by minimizing the amount of vertex data sent to the GPU. EBOs are especially useful for rendering complex shapes like models with many shared vertices, as they allow OpenGL to draw shapes by referencing indices rather than duplicating vertex information.
+
 ## **perspective Projection**
 In 3D graphics, perspective projection is the process of simulating how objects appear smaller as they get farther from the viewer, just like in real life. This effect is what makes a 3D scene appear realistic on a 2D screen, giving a sense of depth and distance.
 - **Distant Objects Appear Smaller**: Objects farther from the camera appear smaller, similar to how our eyes perceive distance.
